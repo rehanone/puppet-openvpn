@@ -1,0 +1,42 @@
+port <%= @port %>
+proto <%= @proto %>
+dev <%= @dev %>
+
+ca <%= @keys_dir %>/ca.crt
+cert <%= @keys_dir %>/<%= @key_name %>.crt
+key <%= @keys_dir %>/<%= @key_name %>.key
+dh <%= @keys_dir %>/dh<%= @key_size %>.pem
+tls-auth <%= @keys_dir %>/ta.key 0 # This file is secret
+
+server <%= @server %>
+
+<% if !@routes.empty? -%>
+# Static routes
+<% @routes.each do |route| -%>
+push "route <%= route %>"
+<% end -%>
+<% end -%>
+
+<% if @cipher -%>
+cipher <%= @cipher %>
+<% end -%>
+
+<% if @max_clients -%>
+max-clients <% @max_clients %>
+<% end -%>
+
+user <%= @user %>
+group <%= @group %>
+
+client-to-client
+keepalive 10 120
+comp-lzo
+
+persist-key
+persist-tun
+
+ifconfig-pool-persist <%= @log_dir %>/ipp.txt
+status <%= @log_dir %>/openvpn-status.log
+log <%= @log_dir %>/openvpn.log
+verb 3
+

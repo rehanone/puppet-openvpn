@@ -1,0 +1,63 @@
+<%- |   String     $key_name,
+        String     $keys_dir,
+        String     $log_dir,
+
+        Integer[0, 65535]    $port,
+        Enum[tcp, udp]       $proto,
+        Enum[tun, tap]       $dev,
+        String               $server,
+
+        Array[String]        $routes,
+        Optional[String]     $user,
+        Optional[String]     $group,
+        Optional[String]     $cipher,
+        Optional[Integer[0]] $max_clients,
+| -%>
+# HEADER: This file is managed by Puppet; changes may be overwritten.
+
+port <%= $port %>
+proto <%= $proto %>
+dev <%= $dev %>
+
+server <%= $server %>
+
+ca <%= $keys_dir %>/ca.crt
+cert <%= $keys_dir %>/issued/<%= $key_name %>.crt
+key <%= $keys_dir %>/private/<%= $key_name %>.key
+dh <%= $keys_dir %>/dh.pem
+
+tls-auth <%= $keys_dir %>/ta.key 0 # This file is secret
+tls-server
+remote-cert-tls client
+
+# Static routes
+<% $routes.each |$route| { -%>
+push "route <%= $route %>"
+<% } -%>
+
+<% if $cipher { -%>
+cipher <%= $cipher %>
+<% } -%>
+
+<% if $max_clients { -%>
+max-clients <%= $max_clients %>
+<% } -%>
+
+<% if $user { -%>
+user <%= $user %>
+<% } -%>
+<% if $group { -%>
+group <%= $group %>
+<% } -%>
+
+client-to-client
+keepalive 10 120
+comp-lzo
+
+persist-key
+persist-tun
+
+ifconfig-pool-persist <%= $log_dir %>/ipp.txt
+status <%= $log_dir %>/openvpn-status.log
+log <%= $log_dir %>/openvpn.log
+verb 3

@@ -1,0 +1,10 @@
+fixtures:
+  forge_modules:
+    stdlib:
+      repo: "puppetlabs/stdlib"
+  repositories:
+    easyrsa:
+      repo: 'https://github.com/rehanone/puppet-easyrsa.git'
+      ref: '0.2.1'
+  symlinks:
+    cfssl: "#{source_dir}"

@@ -1,0 +1,34 @@
+client
+
+dev <%= @dev %>
+proto <%= @proto %>
+
+remote <%= @server %> <%= @port %>
+
+resolv-retry infinite
+nobind
+
+user <%= @user %>
+group <%= @group %>
+
+persist-key
+persist-tun
+
+mute-replay-warnings
+
+ca <%= @client_keys_dir %>/ca.crt
+cert <%= @client_keys_dir %>/<%= @name %>.crt
+key <%= @client_keys_dir %>/<%= @name %>.key
+tls-auth <%= @client_keys_dir %>/ta.key 1
+
+ns-cert-type server
+comp-lzo
+
+<% if @cipher -%>
+cipher <%= @cipher %>
+<% end -%>
+
+;mute 20
+
+verb 3
+

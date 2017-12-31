@@ -1,0 +1,53 @@
+<%- |   String     $key_name,
+        String     $keys_dir,
+
+        Integer[0, 65535]    $port,
+        Enum[tcp, udp]       $proto,
+        Enum[tun, tap]       $dev,
+        String               $server,
+
+        Optional[String]     $user,
+        Optional[String]     $group,
+        Optional[String]     $cipher,
+| -%>
+client
+
+dev <%= $dev %>
+proto <%= $proto %>
+
+remote <%= $server %> <%= $port %>
+
+resolv-retry infinite
+nobind
+
+<% if $user { -%>
+user <%= $user %>
+<% } -%>
+<% if $group { -%>
+group <%= $group %>
+<% } -%>
+
+persist-key
+persist-tun
+
+mute-replay-warnings
+
+ca <%= $keys_dir %>/ca.crt
+cert <%= $keys_dir %>/<%= $key_name %>.crt
+key <%= $keys_dir %>/<%= $key_name %>.key
+
+tls-auth <%= $keys_dir %>/ta.key 1
+tls-client
+remote-cert-tls server
+
+comp-lzo
+
+<% if $cipher { -%>
+cipher <%= $cipher %>
+<% } -%>
+
+;mute 20
+
+verb 3
+
+auth-nocache

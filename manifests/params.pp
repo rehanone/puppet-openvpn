@@ -31,7 +31,7 @@ class openvpn::params {
   $organization     = 'Your Company Limited'
   $email            = 'you@yourcompany.com'
   $org_unit         = 'your_dept'
-  
+
   $port             = 1194
   $proto            = 'udp'
   $dev              = 'tun'

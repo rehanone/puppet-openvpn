@@ -11,26 +11,26 @@ define openvpn::server (
   String     $org_unit     = $openvpn::org_unit,
 
   Integer[0, 65535]
-             $port         = $openvpn::params::port,
+  $port                    = $openvpn::params::port,
   Enum[tcp, udp]
-             $proto        = $openvpn::params::proto,
+  $proto                   = $openvpn::params::proto,
   Enum[tun, tap]
-             $dev          = $openvpn::params::dev,
+  $dev                     = $openvpn::params::dev,
   String     $user         = $openvpn::params::user,
   String     $group        = $openvpn::params::group,
   Optional[String]
-             $cipher       = $openvpn::params::cipher,
+  $cipher                  = $openvpn::params::cipher,
   Optional[String]
-             $server       = $openvpn::params::server,
+  $server                  = $openvpn::params::server,
   Array[String]
-             $routes       = $openvpn::params::routes,
+  $routes                  = $openvpn::params::routes,
   Optional[Integer[0]]
-             $max_clients  = $openvpn::params::max_clients,
+  $max_clients             = $openvpn::params::max_clients,
 ) {
 
   Class["${module_name}::easyrsa"] -> Openvpn::Server[$title]
 
-  $log_dir  = "${openvpn::log_dir}/${title}"
+  $log_dir = "${openvpn::log_dir}/${title}"
   $keys_dir = $openvpn::pki
 
   easyrsa::server { $title:
@@ -78,7 +78,7 @@ define openvpn::server (
     notify  => Class["${module_name}::service"],
   }
 
-  if $::service_provider == 'systemd' {
+  if $::facts['service_provider'] == 'systemd' {
     service { "${openvpn::service_name}@${title}":
       ensure    => $openvpn::service_ensure,
       enable    => $openvpn::service_enable,

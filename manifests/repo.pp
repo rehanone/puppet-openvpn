@@ -1,4 +1,3 @@
-
 # Configure package sources for Openvpn
 class openvpn::repo inherits openvpn {
 
@@ -19,8 +18,8 @@ class openvpn::repo inherits openvpn {
             $openvpn_src_url = 'build.openvpn.net'
 
             apt::key { $openvpn_key_url:
-              id      => '30EBF4E73CCE63EEE124DD278E6DA8B4E158C569',
-              source  => "https://${openvpn_key_url}/repos/repo-public.gpg",
+              id     => '30EBF4E73CCE63EEE124DD278E6DA8B4E158C569',
+              source => "https://${openvpn_key_url}/repos/repo-public.gpg",
             }
 
             apt::source { $openvpn_src_url:
@@ -29,6 +28,7 @@ class openvpn::repo inherits openvpn {
               include  => { 'src' => false },
             }
           }
+          default: {}
         }
       }
       'Archlinux': {

@@ -1,5 +1,6 @@
 # Define OpenVPN client client specific config.
 define openvpn::client (
+  String     $server,
   String     $key_name      = $title,
   Integer[0] $key_size      = $openvpn::key_size,
   Integer[0] $ca_expire     = $openvpn::ca_expire,
@@ -12,17 +13,16 @@ define openvpn::client (
   String     $org_unit      = $openvpn::org_unit,
 
   Integer[0, 65535]
-             $port          = $openvpn::params::port,
+  $port                     = $openvpn::params::port,
   Enum[tcp, udp]
-             $proto         = $openvpn::params::proto,
+  $proto                    = $openvpn::params::proto,
   Enum[tun, tap]
-             $dev           = $openvpn::params::dev,
+  $dev                      = $openvpn::params::dev,
   String     $user          = $openvpn::params::user,
   String     $group         = $openvpn::params::group,
   Optional[String]
-             $cipher        = $openvpn::params::cipher,
+  $cipher                   = $openvpn::params::cipher,
 
-  String     $server,
   Boolean    $windows_based = false,
 ) {
 
@@ -31,9 +31,13 @@ define openvpn::client (
   if $windows_based {
     $client_keys_dir = 'D:/openvpn/keys'
     $conf_extension = 'ovpn'
+    $the_user = undef
+    $the_group = undef
   } else {
     $client_keys_dir = $openvpn::keys_dir
     $conf_extension = 'conf'
+    $the_user = $user
+    $the_group = $group
   }
 
   easyrsa::client { $title:
@@ -86,22 +90,16 @@ define openvpn::client (
     mode    => '0444',
     content => epp("${module_name}/client.epp",
       {
-        'key_name'    => $key_name,
-        'keys_dir'    => $client_keys_dir,
+        'key_name' => $key_name,
+        'keys_dir' => $client_keys_dir,
 
-        'port'        => $port,
-        'proto'       => $proto,
-        'dev'         => $dev,
-        'server'      => $server,
-        'user'        => $windows_based ? {
-          true    => undef,
-          default => $user,
-        },
-        'group'       => $windows_based ? {
-          true    => undef,
-          default => $group,
-        },
-        'cipher'      => $cipher,
+        'port'     => $port,
+        'proto'    => $proto,
+        'dev'      => $dev,
+        'server'   => $server,
+        'user'     => $the_user,
+        'group'    => $the_group,
+        'cipher'   => $cipher,
       }
     ),
     notify  => Exec["tar-${key_name}"];
@@ -111,7 +109,7 @@ define openvpn::client (
     "rm-${key_name}-old":
       cwd         => "${openvpn::bundles_dir}/",
       command     => "rm -f ${key_name}.tar.gz",
-      path        => "/bin",
+      path        => '/bin',
       refreshonly => true,
       loglevel    => debug,
       logoutput   => true,
@@ -126,7 +124,7 @@ define openvpn::client (
     "tar-${key_name}":
       cwd         => "${openvpn::bundles_dir}/",
       command     => "rm -f ${key_name}.tar.gz; tar -chzvf ${key_name}.tar.gz ${key_name}",
-      path        => "/bin",
+      path        => '/bin',
       refreshonly => true,
       loglevel    => debug,
       logoutput   => true,

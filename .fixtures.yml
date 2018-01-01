@@ -2,9 +2,11 @@ fixtures:
   forge_modules:
     stdlib:
       repo: "puppetlabs/stdlib"
+    apt:
+      repo: "puppetlabs/apt"
   repositories:
     easyrsa:
       repo: 'https://github.com/rehanone/puppet-easyrsa.git'
       ref: '0.2.1'
   symlinks:
-    cfssl: "#{source_dir}"
+    openvpn: "#{source_dir}"

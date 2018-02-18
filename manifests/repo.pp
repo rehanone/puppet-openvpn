@@ -6,6 +6,7 @@ class openvpn::repo inherits openvpn {
   if $openvpn::repo_manage {
     case $::operatingsystem {
       'RedHat', 'Fedora', 'CentOS': {
+        contain epel
       }
       'Gentoo': {
       }

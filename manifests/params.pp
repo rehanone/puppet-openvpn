@@ -3,7 +3,6 @@
 class openvpn::params {
   $repo_manage      = true
   $package_ensure   = 'installed'
-  $package_easyrsa  = 'easy-rsa'
   $package_name     = 'openvpn'
   $service_enable   = true
   $service_ensure   = 'running'

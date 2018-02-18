@@ -16,12 +16,12 @@ describe 'openvpn class:', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfam
   end
 
   before do
-    shell "rm -fv /etc/openvpn/keys/*"
+    shell "rm -fv /etc/openvpn/easyrsa/*"
   end
 
-  context 'ca_manage => true:' do
+  context 'repo_manage => true, secrets_manage => true:' do
     it 'runs successfully' do
-      pp = "class { 'openvpn': repo_manage => true }"
+      pp = "class { 'openvpn': repo_manage => true, secrets_manage => true }"
 
       apply_manifest(pp, :catch_failures => true) do |r|
         expect(r.stderr).not_to match(/error/i)

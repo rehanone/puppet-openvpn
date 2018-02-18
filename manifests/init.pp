@@ -2,7 +2,6 @@
 class openvpn (
   Boolean    $repo_manage     = $openvpn::params::repo_manage,
   String     $package_ensure  = $openvpn::params::package_ensure,
-  String     $package_easyrsa = $openvpn::params::package_easyrsa,
   String     $package_name    = $openvpn::params::package_name,
   Boolean    $service_enable  = $openvpn::params::service_enable,
   String     $service_ensure  = $openvpn::params::service_ensure,

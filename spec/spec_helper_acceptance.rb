@@ -12,7 +12,9 @@ unless ENV['RS_PROVISION'] == 'no' or ENV['BEAKER_provision'] == 'no'
     environmentpath = environmentpath.split(':').first if environmentpath
 
     on host, puppet('module install puppetlabs-stdlib --version 4.24.0')
-    on host, puppet('module install rehan-wget --version 0.2.1')
+    on host, puppet('module install puppetlabs-apt --version 4.5.1')
+    on host, puppet('module install stahnma-epel --version 1.3.0')
+    on host, puppet('module install rehan-easyrsa --version 0.3.1')
   end
 end
 

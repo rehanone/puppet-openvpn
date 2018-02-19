@@ -15,13 +15,17 @@ describe 'openvpn' do
         it { should contain_class('openvpn::repo') }
         it { should contain_class('openvpn::install') }
         it { should contain_class('openvpn::easyrsa') }
+        it { should contain_class('openvpn::sysctl_forward') }
         it { should contain_class('openvpn::config') }
         it { should contain_class('openvpn::service') }
+        it { should contain_class('openvpn::firewall') }
 
         it { is_expected.to contain_class('openvpn::repo').that_comes_before('Class[openvpn::install]') }
         it { is_expected.to contain_class('openvpn::install').that_comes_before('Class[openvpn::easyrsa]') }
-        it { is_expected.to contain_class('openvpn::easyrsa').that_comes_before('Class[openvpn::config]') }
+        it { is_expected.to contain_class('openvpn::easyrsa').that_comes_before('Class[openvpn::sysctl_forward]') }
+        it { is_expected.to contain_class('openvpn::sysctl_forward').that_comes_before('Class[openvpn::config]') }
         it { is_expected.to contain_class('openvpn::config').that_comes_before('Class[openvpn::service]') }
+        it { is_expected.to contain_class('openvpn::service').that_comes_before('Class[openvpn::firewall]') }
       end
     end
   end

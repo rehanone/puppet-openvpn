@@ -14,15 +14,17 @@ define openvpn::server (
   $port                    = $openvpn::params::port,
   Enum[tcp, udp]
   $proto                   = $openvpn::params::proto,
-  Enum[tun, tap]
-  $dev                     = $openvpn::params::dev,
+  Openvpn::VpnDevice
+  $vpn_device              = $openvpn::params::vpn_device,
+  Openvpn::EthDevice
+  $mapped_device           = $openvpn::params::mapped_device,
   String     $user         = $openvpn::params::user,
   String     $group        = $openvpn::params::group,
   Optional[String]
   $cipher                  = $openvpn::params::cipher,
-  Optional[String]
-  $server                  = $openvpn::params::server,
-  Array[String]
+  Stdlib::Compat::Ipv4
+  $server,
+  Array[Stdlib::Compat::Ipv4]
   $routes                  = $openvpn::params::routes,
   Optional[Integer[0]]
   $max_clients             = $openvpn::params::max_clients,
@@ -56,6 +58,8 @@ define openvpn::server (
     require => Class["${module_name}::install"],
   }
 
+  $transformed_routes = $routes.map |$x| { "${ipv4_get_address($x)} ${ipv4_get_subnet($x)}" }
+
   # Create server config
   file { "${openvpn::conf_dir}/${title}.conf":
     content => epp("${module_name}/server.conf.epp",
@@ -66,9 +70,9 @@ define openvpn::server (
 
         'port'        => $port,
         'proto'       => $proto,
-        'dev'         => $dev,
-        'server'      => $server,
-        'routes'      => $routes,
+        'dev'         => $vpn_device[0 ,3],
+        'server'      => "${ipv4_get_address($server)} ${ipv4_get_subnet($server)}",
+        'routes'      => $transformed_routes,
         'user'        => $user,
         'group'       => $group,
         'cipher'      => $cipher,
@@ -92,6 +96,16 @@ define openvpn::server (
       dport  => $port,
       proto  => $proto,
       action => accept,
+    }
+
+    firewall { "${port} -A FORWARD -i ${vpn_device} -o ${mapped_device} -s ${server} -m conntrack --ctstate NEW -j ACCEPT":
+      chain    => 'FORWARD',
+      proto    => all,
+      state    => 'NEW',
+      iniface  => $vpn_device,
+      outiface => $mapped_device,
+      source   => $server,
+      action   => accept,
     }
   }
 }

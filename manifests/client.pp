@@ -16,8 +16,8 @@ define openvpn::client (
   $port                     = $openvpn::params::port,
   Enum[tcp, udp]
   $proto                    = $openvpn::params::proto,
-  Enum[tun, tap]
-  $dev                      = $openvpn::params::dev,
+  Openvpn::VpnDevice
+  $vpn_device               = $openvpn::params::vpn_device,
   String     $user          = $openvpn::params::user,
   String     $group         = $openvpn::params::group,
   Optional[String]
@@ -95,7 +95,7 @@ define openvpn::client (
 
         'port'     => $port,
         'proto'    => $proto,
-        'dev'      => $dev,
+        'dev'      => $vpn_device[0, 3],
         'server'   => $server,
         'user'     => $the_user,
         'group'    => $the_group,

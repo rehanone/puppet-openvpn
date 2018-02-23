@@ -1,0 +1,38 @@
+---
+openvpn::repo_manage: true
+openvpn::package_ensure: 'installed'
+openvpn::package_name: 'openvpn'
+openvpn::service_enable: true
+openvpn::service_ensure: 'running'
+openvpn::service_manage: true
+openvpn::service_name: 'openvpn'
+openvpn::firewall_manage: false
+openvpn::sysctl_ip_forward: false
+
+openvpn::conf_dir: '/etc/openvpn'
+openvpn::keys_dir: "%{hiera('openvpn::conf_dir')}/keys"
+openvpn::log_dir: '/var/log/openvpn'
+openvpn::bundles_dir: "%{hiera('openvpn::conf_dir')}/bundles"
+openvpn::pkiroot: "%{hiera('openvpn::conf_dir')}/easyrsa"
+openvpn::pkiname: 'ovpnpki'
+
+openvpn::secrets_manage: false
+openvpn::ca_name: 'EasyRSA'
+openvpn::key_algo: 'rsa'
+openvpn::key_size: 2048
+openvpn::dh_key_size: 2048
+openvpn::ca_expire: 3650
+openvpn::key_expire: 3650
+openvpn::country: 'UK'
+openvpn::state: 'England'
+openvpn::city: 'Dewsbury'
+openvpn::organization: 'Your Company Limited'
+openvpn::email: 'you@yourcompany.com'
+openvpn::org_unit: 'your_dept'
+
+openvpn::port: 1194
+openvpn::proto: 'udp'
+openvpn::vpn_device: 'tun0'
+openvpn::mapped_device: 'eth0'
+openvpn::user: 'nobody'
+openvpn::group: 'nogroup'

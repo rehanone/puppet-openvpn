@@ -8,8 +8,8 @@ class openvpn::params {
   $service_ensure    = 'running'
   $service_manage    = true
   $service_name      = 'openvpn'
-  $firewall_manage   = true
-  $sysctl_ip_forward = true
+  $firewall_manage   = false
+  $sysctl_ip_forward = false
 
   $conf_dir          = '/etc/openvpn'
   $keys_dir          = "${conf_dir}/keys"

@@ -11,23 +11,23 @@ define openvpn::server (
   String     $org_unit     = $openvpn::org_unit,
 
   Integer[0, 65535]
-  $port                    = $openvpn::params::port,
+  $port                    = lookup('openvpn::port', Integer),
   Enum[tcp, udp]
-  $proto                   = $openvpn::params::proto,
+  $proto                   = lookup('openvpn::proto', Enum[tcp, udp]),
   Openvpn::VpnDevice
-  $vpn_device              = $openvpn::params::vpn_device,
+  $vpn_device              = lookup('openvpn::vpn_device', Openvpn::VpnDevice),
   Openvpn::EthDevice
-  $mapped_device           = $openvpn::params::mapped_device,
-  String     $user         = $openvpn::params::user,
-  String     $group        = $openvpn::params::group,
+  $mapped_device           = lookup('openvpn::mapped_device', Openvpn::Openvpn::EthDevice),
+  String     $user         = lookup('openvpn::user', String),
+  String     $group        = lookup('openvpn::group', String),
   Optional[String]
-  $cipher                  = $openvpn::params::cipher,
+  $cipher                  = lookup('openvpn::cipher', Optional[String], 'first', undef),
   Stdlib::Compat::Ipv4
   $server,
   Array[Stdlib::Compat::Ipv4]
-  $routes                  = $openvpn::params::routes,
+  $routes                  = [],
   Optional[Integer[0]]
-  $max_clients             = $openvpn::params::max_clients,
+  $max_clients             = lookup('openvpn::max_clients', Optional[Integer[0]], 'first', undef),
 ) {
 
   Class["${module_name}::easyrsa"] -> Openvpn::Server[$title]
@@ -98,7 +98,8 @@ define openvpn::server (
       action => accept,
     }
 
-    firewall { "${port} -A FORWARD -i ${vpn_device} -o ${mapped_device} -s ${server} -m conntrack --ctstate NEW -j ACCEPT":
+    firewall { "${port} -A FORWARD -i ${vpn_device} -o ${mapped_device} -s ${server}
+       -m conntrack --ctstate NEW -j ACCEPT":
       chain    => 'FORWARD',
       proto    => all,
       state    => 'NEW',

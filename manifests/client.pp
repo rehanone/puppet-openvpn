@@ -13,15 +13,15 @@ define openvpn::client (
   String     $org_unit      = $openvpn::org_unit,
 
   Integer[0, 65535]
-  $port                     = $openvpn::params::port,
+  $port                     = lookup('openvpn::port', Integer),
   Enum[tcp, udp]
-  $proto                    = $openvpn::params::proto,
+  $proto                    = lookup('openvpn::proto', Enum[tcp, udp]),
   Openvpn::VpnDevice
-  $vpn_device               = $openvpn::params::vpn_device,
-  String     $user          = $openvpn::params::user,
-  String     $group         = $openvpn::params::group,
+  $vpn_device               = lookup('openvpn::vpn_device', Openvpn::VpnDevice),
+  String     $user          = lookup('openvpn::user', String),
+  String     $group         = lookup('openvpn::group', String),
   Optional[String]
-  $cipher                   = $openvpn::params::cipher,
+  $cipher                   = lookup('openvpn::cipher', Optional[String], 'first', undef),
 
   Boolean    $windows_based = false,
 ) {

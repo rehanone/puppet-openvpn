@@ -4,7 +4,7 @@ class openvpn::repo inherits openvpn {
   assert_private("Use of private class ${name} by ${caller_module_name}")
 
   if $openvpn::repo_manage {
-    case $::operatingsystem {
+    case $::facts[os][name] {
       'RedHat', 'Fedora', 'CentOS': {
         contain epel
       }

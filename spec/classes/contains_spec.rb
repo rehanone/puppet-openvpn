@@ -2,23 +2,24 @@
 
 require 'spec_helper'
 describe 'openvpn' do
-  let(:facts) {{ :is_virtual => 'false' }}
-
-  on_supported_os.select { |_, f| f[:os]['family'] != 'Solaris' }.each do |os, f|
+  on_supported_os.each do |os, facts|
     context "on #{os}" do
       let(:facts) do
-        f.merge(super())
+        facts
       end
 
-      it { is_expected.to compile.with_all_deps }
-      describe "Testing the dependancies between the classes" do
-        it { should contain_class('openvpn::repo') }
-        it { should contain_class('openvpn::install') }
-        it { should contain_class('openvpn::easyrsa') }
-        it { should contain_class('openvpn::sysctl_forward') }
-        it { should contain_class('openvpn::config') }
-        it { should contain_class('openvpn::service') }
-        it { should contain_class('openvpn::firewall') }
+      it {
+        is_expected.to compile.with_all_deps
+      }
+
+      describe 'Testing the dependencies between the classes' do
+        it { is_expected.to contain_class('openvpn::repo') }
+        it { is_expected.to contain_class('openvpn::install') }
+        it { is_expected.to contain_class('openvpn::easyrsa') }
+        it { is_expected.to contain_class('openvpn::sysctl_forward') }
+        it { is_expected.to contain_class('openvpn::config') }
+        it { is_expected.to contain_class('openvpn::service') }
+        it { is_expected.to contain_class('openvpn::firewall') }
 
         it { is_expected.to contain_class('openvpn::repo').that_comes_before('Class[openvpn::install]') }
         it { is_expected.to contain_class('openvpn::install').that_comes_before('Class[openvpn::easyrsa]') }

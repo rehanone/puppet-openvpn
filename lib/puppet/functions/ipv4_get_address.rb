@@ -5,6 +5,6 @@ Puppet::Functions.create_function(:ipv4_get_address) do
   end
 
   def ipv4_get_address(value)
-    value.split("/")[0]
+    value.split('/')[0]
   end
 end

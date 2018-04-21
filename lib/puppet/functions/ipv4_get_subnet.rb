@@ -5,15 +5,13 @@ Puppet::Functions.create_function(:ipv4_get_subnet) do
   end
 
   def ipv4_get_subnet(value)
-    subnet = value.split("/")[1]
+    subnet = value.split('/')[1]
 
-    if subnet.include? "."
-      return subnet
-    else
-      require 'ipaddr'
+    return subnet if subnet.include? '.'
 
-      base = IPAddr.new('255.255.255.255')
-      return base.mask(subnet.to_i()).to_string()
-    end
+    require 'ipaddr'
+
+    base = IPAddr.new('255.255.255.255')
+    base.mask(subnet.to_i).to_string
   end
 end

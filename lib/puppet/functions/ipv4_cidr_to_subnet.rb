@@ -8,6 +8,6 @@ Puppet::Functions.create_function(:ipv4_cidr_to_subnet) do
     require 'ipaddr'
 
     base = IPAddr.new('255.255.255.255')
-    base.mask(value).to_string()
+    base.mask(value).to_string
   end
 end

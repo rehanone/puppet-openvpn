@@ -3,7 +3,7 @@ require 'spec_helper'
 if Puppet::Util::Package.versioncmp(Puppet.version, '4.5.0') >= 0
   describe 'Openvpn::EthDevice' do
     describe 'accepts eth with single digit' do
-      %w[eth0 eth1 eth1000].each do |value|
+      ['eth0', 'eth1', 'eth1000'].each do |value|
         describe value.inspect do
           it { is_expected.to allow_value(value) }
         end

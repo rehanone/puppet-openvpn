@@ -4,6 +4,8 @@ fixtures:
       repo: "puppetlabs/stdlib"
     apt:
       repo: "puppetlabs/apt"
+    yumrepo_core:
+      repo: "puppetlabs/yumrepo_core"
     vcsrepo:
       repo: "puppetlabs/vcsrepo"
     epel:
@@ -15,6 +17,6 @@ fixtures:
   repositories:
     easyrsa:
       repo: 'https://github.com/rehanone/puppet-easyrsa.git'
-      ref: '0.3.1'
+      ref: '0.7.0'
   symlinks:
     openvpn: "#{source_dir}"

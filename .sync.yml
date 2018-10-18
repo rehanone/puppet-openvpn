@@ -30,13 +30,12 @@ appveyor.yml:
   docker_sets:
   - set: docker/ubuntu-18.04
   - set: docker/ubuntu-16.04
-  - set: docker/ubuntu-14.04
   - set: docker/debian-9
   - set: docker/debian-8
   - set: docker/centos-7
   docker_defaults:
     # values will replace @@SET@@ with the docker_sets' value
-    rvm: 2.4.4
+    rvm: 2.5.0
     sudo: required
     dist: trusty
     services: docker

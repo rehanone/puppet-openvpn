@@ -17,6 +17,10 @@
       "version_requirement": ">= 4.0.0 < 7.0.0"
     },
     {
+      "name": "puppetlabs-yumrepo_core",
+      "version_requirement": ">= 1.0.0 < 2.0.0"
+    },
+    {
       "name": "stahnma-epel",
       "version_requirement": ">= 1.0.0 < 2.0.0"
     },
@@ -61,14 +65,12 @@
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "12.04",
-        "14.04",
-        "15.10",
         "16.04",
         "16.10",
         "17.04",
         "17.10",
-        "18.04"
+        "18.04",
+        "18.10"
       ]
     },
     {
@@ -78,7 +80,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 4.10.0 < 6.0.0"
+      "version_requirement": ">= 6.0.0 < 7.0.0"
     }
   ],
   "tags": [
@@ -87,7 +89,7 @@
     "pki",
     "VPN server"
   ],
-  "pdk-version": "1.7.0",
+  "pdk-version": "1.7.1",
   "template-url": "file:///opt/puppetlabs/pdk/share/cache/pdk-templates.git",
-  "template-ref": "1.7.0-0-g57412ed"
+  "template-ref": "1.7.1-0-g810b982"
 }

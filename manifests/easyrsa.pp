@@ -5,12 +5,13 @@ class openvpn::easyrsa () inherits openvpn {
   if $openvpn::secrets_manage {
 
     class { 'easyrsa':
-      pkiroot  => $openvpn::pkiroot,
-      pkis     =>
+      git_manage => $openvpn::git_manage,
+      pkiroot    => $openvpn::pkiroot,
+      pkis       =>
         {
           $openvpn::pkiname => {},
         },
-      cas      => {
+      cas        => {
         $openvpn::pkiname => {
           ca_name      => $openvpn::ca_name,
           key          =>
@@ -27,12 +28,12 @@ class openvpn::easyrsa () inherits openvpn {
           org_unit     => $openvpn::org_unit,
         },
       },
-      dhparams => {
+      dhparams   => {
         $openvpn::pkiname => {
           key_size => $openvpn::dh_key_size,
         },
       },
-      require  => Class["${module_name}::install"],
+      require    => Class["${module_name}::install"],
     }
     -> exec { "genkey-ta-${openvpn::pki}-ta.key":
       command  => 'openvpn --genkey --secret ta.key',

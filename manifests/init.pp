@@ -1,5 +1,6 @@
 # Setup OpenVPN package and service
 class openvpn (
+  Boolean    $git_manage,
   Boolean    $repo_manage,
   String     $package_ensure,
   String     $package_name,

@@ -1,3 +1,10 @@
+## 0.4.0 (September 16, 2019)
+
+Improvements:
+
+- Update supported network interfaces.
+- Updated `pdk` templates.
+
 ## 0.3.0 (August 29, 2019)
 
 Improvements:

@@ -16,8 +16,8 @@ define openvpn::client (
   $port                     = lookup('openvpn::port', Integer),
   Enum[tcp, udp]
   $proto                    = lookup('openvpn::proto', Enum[tcp, udp]),
-  Openvpn::VpnDevice
-  $vpn_device               = lookup('openvpn::vpn_device', Openvpn::VpnDevice),
+  Openvpn::VpnInterface
+  $vpn_device               = lookup('openvpn::vpn_device', Openvpn::VpnInterface),
   String     $user          = lookup('openvpn::user', String),
   String     $group         = lookup('openvpn::group', String),
   Optional[String]

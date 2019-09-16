@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 if Puppet::Util::Package.versioncmp(Puppet.version, '4.5.0') >= 0
-  describe 'Openvpn::VpnDevice' do
+  describe 'Openvpn::TunInterface' do
     describe 'accepts tun with single digit' do
-      ['tun0', 'tun1', 'tun1000', 'tap0', 'tap1', 'tap1000'].each do |value|
+      ['tun0', 'tun1', 'tun1000'].each do |value|
         describe value.inspect do
           it { is_expected.to allow_value(value) }
         end

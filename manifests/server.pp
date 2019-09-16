@@ -14,10 +14,10 @@ define openvpn::server (
   $port                    = lookup('openvpn::port', Integer),
   Enum[tcp, udp]
   $proto                   = lookup('openvpn::proto', Enum[tcp, udp]),
-  Openvpn::VpnDevice
-  $vpn_device              = lookup('openvpn::vpn_device', Openvpn::VpnDevice),
-  Openvpn::EthDevice
-  $mapped_device           = lookup('openvpn::mapped_device', Openvpn::Openvpn::EthDevice),
+  Openvpn::VpnInterface
+  $vpn_device              = lookup('openvpn::vpn_device', Openvpn::VpnInterface),
+  Openvpn::EthernetInterface
+  $mapped_device           = lookup('openvpn::mapped_device', Openvpn::Openvpn::EthernetInterface),
   String     $user         = lookup('openvpn::user', String),
   String     $group        = lookup('openvpn::group', String),
   Optional[String]

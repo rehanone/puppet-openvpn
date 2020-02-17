@@ -1,3 +1,11 @@
+## 0.5.0 (February 16, 2020)
+
+Improvements:
+
+- Added support for CentOS 8.
+- Updated os support matrix.
+- Updated `pdk` templates.
+
 ## 0.4.0 (September 16, 2019)
 
 Improvements:

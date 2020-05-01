@@ -9,7 +9,7 @@ fixtures:
     vcsrepo:
       repo: "puppetlabs/vcsrepo"
     epel:
-      repo: "stahnma/epel"
+      repo: "puppet/epel"
     augeasproviders_core:
       repo: "herculesteam/augeasproviders_core"
     augeasproviders_sysctl:

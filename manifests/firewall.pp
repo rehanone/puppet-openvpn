@@ -4,7 +4,7 @@ class openvpn::firewall () inherits openvpn {
 
   if $openvpn::firewall_manage and defined('::firewall') {
 
-    firewall { '1020 FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT':
+    firewall { '1020 FORWARD -m state --state NEW RELATED,ESTABLISHED -j ACCEPT':
       chain  => 'FORWARD',
       proto  => all,
       state  => ['RELATED', 'ESTABLISHED'],

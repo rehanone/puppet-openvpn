@@ -15,11 +15,11 @@ describe 'openvpn class:', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily
     end
   end
 
-  context 'repo_manage => true, secrets_manage => true:' do
+  context 'secrets_manage => true:' do
     it 'runs successfully' do
       shell 'rm -fv /etc/openvpn/easyrsa/*'
 
-      pp = "class { 'openvpn': repo_manage => true, secrets_manage => true }"
+      pp = "class { 'openvpn': secrets_manage => true }"
 
       apply_manifest(pp, catch_failures: true) do |r|
         expect(r.stderr).not_to match(%r{error}i)

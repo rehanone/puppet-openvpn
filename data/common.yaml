@@ -1,6 +1,6 @@
 ---
 openvpn::git_manage: true
-openvpn::repo_manage: true
+openvpn::repo_manage: false
 openvpn::package_ensure: 'installed'
 openvpn::package_name: 'openvpn'
 openvpn::service_enable: true

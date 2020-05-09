@@ -1,0 +1,4 @@
+---
+openvpn::repo_key_hash: '30EBF4E73CCE63EEE124DD278E6DA8B4E158C569'
+openvpn::repo_key_url: 'https://swupdate.openvpn.net/repos/repo-public.gpg'
+openvpn::repo_src_url: 'http://build.openvpn.net/debian/openvpn/release/2.4'

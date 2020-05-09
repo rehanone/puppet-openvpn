@@ -4,32 +4,26 @@ class openvpn::repo inherits openvpn {
   assert_private("Use of private class ${name} by ${caller_module_name}")
 
   if $openvpn::repo_manage {
-    case $::facts[os][name] {
-      'RedHat', 'Fedora', 'CentOS': {
+    case $::facts[os][family] {
+      'RedHat': {
         require epel
       }
-      'Gentoo': {
-      }
-      'Ubuntu', 'Debian': {
-        case $::lsbdistcodename {
-          'precise', 'trusty', 'xenial': {
-            contain apt
+      'Debian': {
+        contain apt
 
-            $openvpn_key_url = 'swupdate.openvpn.net'
-            $openvpn_src_url = 'build.openvpn.net'
+        $openvpn_key_hash = lookup('openvpn::repo_key_hash')
+        $openvpn_key_url = lookup('openvpn::repo_key_url')
+        $openvpn_src_url = lookup('openvpn::repo_src_url')
 
-            apt::key { $openvpn_key_url:
-              id     => '30EBF4E73CCE63EEE124DD278E6DA8B4E158C569',
-              source => "https://${openvpn_key_url}/repos/repo-public.gpg",
-            }
+        apt::key { 'openvpn-import-repository-key':
+          id     => $openvpn_key_hash,
+          source => $openvpn_key_url,
+        }
 
-            apt::source { $openvpn_src_url:
-              location => "http://${openvpn_src_url}/debian/openvpn/release/2.4",
-              repos    => 'main',
-              include  => { 'src' => false },
-            }
-          }
-          default: {}
+        apt::source { 'build.openvpn.net':
+          location => $openvpn_src_url,
+          repos    => 'main',
+          include  => { 'src' => false },
         }
       }
       'Archlinux': {

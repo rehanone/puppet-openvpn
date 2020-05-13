@@ -3,12 +3,12 @@ class openvpn::config () inherits openvpn {
   assert_private("Use of private class ${name} by ${caller_module_name}")
 
   file { $openvpn::log_dir:
-      ensure  => directory,
+    ensure => directory,
   }
 
   if $openvpn::secrets_manage {
     file { $openvpn::bundles_dir:
-      ensure  => directory,
+      ensure => directory,
     }
   }
 

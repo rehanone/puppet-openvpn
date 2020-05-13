@@ -1,0 +1,67 @@
+<%- |   String            $key_name,
+        Integer[0, 65535] $port,
+        Enum[tcp, udp]    $proto,
+        Enum[tun, tap]    $dev,
+        String            $server,
+        Optional[String]  $user,
+        Optional[String]  $group,
+        Optional[String]  $cipher,
+        Struct[
+          {
+            ca       => String,
+            cert     => String,
+            key      => String,
+            tls_auth => String
+          }
+        ]                 $secret_content,
+| -%>
+client
+
+dev <%= $dev %>
+proto <%= $proto %>
+
+remote <%= $server %> <%= $port %>
+
+resolv-retry infinite
+nobind
+
+<% if $user { -%>
+user <%= $user %>
+<% } -%>
+<% if $group { -%>
+group <%= $group %>
+<% } -%>
+
+persist-key
+persist-tun
+
+mute-replay-warnings
+
+tls-client
+remote-cert-tls server
+
+comp-lzo
+
+<% if $cipher { -%>
+cipher <%= $cipher %>
+<% } -%>
+
+;mute 20
+
+verb 3
+
+auth-nocache
+
+<ca>
+<%= $secret_content[ca] %></ca>
+<cert>
+<%= $secret_content[cert] %></ca>
+</cert>
+<key>
+<%= $secret_content[key] %></ca>
+</key>
+
+key-direction 1
+<tls-auth>
+<%= $secret_content[tls_auth] %></ca>
+</tls-auth>

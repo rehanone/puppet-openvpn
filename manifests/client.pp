@@ -23,19 +23,18 @@ define openvpn::client (
   Optional[String]
   $cipher                   = lookup('openvpn::cipher', Optional[String], 'first', undef),
 
-  Boolean    $windows_based = false,
+  Enum[conf, ovpn]
+  $conf_extension           = conf,
 ) {
 
   Openvpn::Server[$server] -> Openvpn::Client[$title]
 
-  if $windows_based {
+  if $conf_extension == ovpn {
     $client_keys_dir = 'D:/openvpn/keys'
-    $conf_extension = 'ovpn'
     $the_user = undef
     $the_group = undef
   } else {
     $client_keys_dir = $openvpn::keys_dir
-    $conf_extension = 'conf'
     $the_user = $user
     $the_group = $group
   }
@@ -83,7 +82,7 @@ define openvpn::client (
       require => Easyrsa::Client[$title];
   }
 
-  file { "${openvpn::bundles_dir}/${key_name}/${key_name}.conf":
+  file { "${openvpn::bundles_dir}/${key_name}/${key_name}.${conf_extension}":
     path    => "${openvpn::bundles_dir}/${key_name}/${key_name}.${conf_extension}",
     owner   => root,
     group   => root,
@@ -105,6 +104,33 @@ define openvpn::client (
     notify  => Exec["tar-${key_name}"];
   }
 
+  file { "${openvpn::bundles_dir}/${key_name}/embaded-${key_name}.${conf_extension}":
+    path    => "${openvpn::bundles_dir}/${key_name}/embaded-${key_name}.${conf_extension}",
+    owner   => root,
+    group   => root,
+    mode    => '0444',
+    content => epp("${module_name}/embadded-client.epp",
+      {
+        'key_name'       => $key_name,
+        'port'           => $port,
+        'proto'          => $proto,
+        'dev'            => $vpn_device[0, 3],
+        'server'         => $server,
+        'user'           => $the_user,
+        'group'          => $the_group,
+        'cipher'         => $cipher,
+        'secret_content' => {
+          ca       => 'paste contents of ./keys/ca.crt',
+          cert     => "paste contents of ./keys/${key_name}.crt",
+          key      => "paste contents of ./keys/${key_name}.key",
+          tls_auth => 'paste contents of ./keys/ta.key',
+        },
+      }
+    ),
+    require => Easyrsa::Client[$title]
+  }
+
+
   exec {
     "rm-${key_name}-old":
       cwd         => "${openvpn::bundles_dir}/",
@@ -115,7 +141,7 @@ define openvpn::client (
       logoutput   => true,
       returns     => ['0', '1'],
       subscribe   => [
-        File["${openvpn::bundles_dir}/${key_name}/${key_name}.conf"],
+        File["${openvpn::bundles_dir}/${key_name}/${key_name}.${conf_extension}"],
         File["${openvpn::bundles_dir}/${key_name}/keys/ca.crt"],
         File["${openvpn::bundles_dir}/${key_name}/keys/ta.key"],
         File["${openvpn::bundles_dir}/${key_name}/keys/${key_name}.key"],

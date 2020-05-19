@@ -91,22 +91,63 @@ define openvpn::server (
     }
   }
 
-  if $openvpn::firewall_manage and defined('::firewall') {
-    firewall { "${port} Allow inbound ${proto} connection on port: ${port}":
-      dport  => $port,
-      proto  => $proto,
-      action => accept,
+  if $openvpn::firewall_manage {
+    if defined('::firewall') {
+      firewall { "${port} Allow inbound ${proto} connection on port: ${port}":
+        dport  => $port,
+        proto  => $proto,
+        action => accept,
+      }
+
+      firewall { "${port} -A FORWARD -i ${vpn_device} -o ${mapped_device} -s ${server}
+       -m conntrack --ctstate NEW -j ACCEPT":
+        chain    => 'FORWARD',
+        proto    => all,
+        state    => 'NEW',
+        iniface  => $vpn_device,
+        outiface => $mapped_device,
+        source   => $server,
+        action   => accept,
+      }
     }
 
-    firewall { "${port} -A FORWARD -i ${vpn_device} -o ${mapped_device} -s ${server}
-       -m conntrack --ctstate NEW -j ACCEPT":
-      chain    => 'FORWARD',
-      proto    => all,
-      state    => 'NEW',
-      iniface  => $vpn_device,
-      outiface => $mapped_device,
-      source   => $server,
-      action   => accept,
+    if defined('::ferm') {
+      $chain_name = upcase($key_name)
+
+      ferm::rule { "OPENVPN - Allow inbound ${proto} connection from Internet on port: ${port}":
+        chain  => 'INPUT',
+        action => 'ACCEPT',
+        proto  => $proto,
+        dport  => $port,
+      } ->
+      ferm::chain { $chain_name:
+        content => epp("${module_name}/ferm-openvpn-forword-chain.epp",
+          {
+            'chain'         => $chain_name,
+            'vpn_device'    => $vpn_device,
+            'mapped_device' => $mapped_device,
+            'server'        => $server,
+            'routes'        => $routes,
+          }
+        ),
+      } ->
+      ferm::rule { "OPENVPN - FORWORD all traffic on $vpn_device from network $server to subchain $chain_name":
+        chain     => 'FORWARD',
+        action    => $chain_name,
+        saddr     => $server,
+        proto     => all,
+        interface => $vpn_device,
+      }
+
+      $routes.each |$route| {
+        ferm::rule { "OPENVPN - FORWORD all traffic on $mapped_device from $route to subchain $chain_name":
+          chain     => 'FORWARD',
+          action    => $chain_name,
+          saddr     => $route,
+          proto     => all,
+          interface => $mapped_device,
+        }
+      }
     }
   }
 }

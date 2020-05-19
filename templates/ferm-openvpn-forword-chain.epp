@@ -1,0 +1,27 @@
+<%- |   String                      $chain,
+        Openvpn::VpnInterface       $vpn_device,
+        Openvpn::EthernetInterface  $mapped_device,
+        Stdlib::Compat::Ipv4        $server,
+        Array[Stdlib::Compat::Ipv4] $routes,
+| -%>
+chain <%= $chain %> {
+  interface <%= $vpn_device %> {
+    outerface <%= $mapped_device %> {
+      mod conntrack ctstate (NEW) saddr @ipfilter((<%= $server %>)) ACCEPT;
+
+      #allow traffic to route from VPN subnet to specific host in subnet
+<% $routes.each |$route| { -%>
+      mod comment comment 'OPENVPN - Forword all traffic on <%= $vpn_device %> from <%= $server %> to <%= $route %>' saddr @ipfilter((<%= $server %>)) daddr @ipfilter((<%= $route %>)) ACCEPT;
+<% } -%>
+    }
+  }
+
+  interface <%= $mapped_device %> {
+    outerface <%= $vpn_device %> {
+      #allow traffic from host in server subnet back to VPN subnet
+<% $routes.each |$route| { -%>
+      mod comment comment 'OPENVPN - Forword all traffic on <%= $mapped_device %> from <%= $route %> to <%= $server %>' saddr @ipfilter((<%= $route %>)) daddr @ipfilter((<%= $server %>)) ACCEPT;
+<% } -%>
+    }
+  }
+}

@@ -119,8 +119,8 @@ define openvpn::server (
         action => 'ACCEPT',
         proto  => $proto,
         dport  => $port,
-      } ->
-      ferm::chain { $chain_name:
+      }
+      -> ferm::chain { $chain_name:
         content => epp("${module_name}/ferm-openvpn-forword-chain.epp",
           {
             'chain'         => $chain_name,
@@ -130,8 +130,8 @@ define openvpn::server (
             'routes'        => $routes,
           }
         ),
-      } ->
-      ferm::rule { "OPENVPN - FORWORD all traffic on $vpn_device from network $server to subchain $chain_name":
+      }
+      -> ferm::rule { "OPENVPN - FORWORD all traffic on ${vpn_device} from network ${server} to subchain ${chain_name}":
         chain     => 'FORWARD',
         action    => $chain_name,
         saddr     => $server,
@@ -140,7 +140,7 @@ define openvpn::server (
       }
 
       $routes.each |$route| {
-        ferm::rule { "OPENVPN - FORWORD all traffic on $mapped_device from $route to subchain $chain_name":
+        ferm::rule { "OPENVPN - FORWORD all traffic on ${mapped_device} from ${route} to subchain ${chain_name}":
           chain     => 'FORWARD',
           action    => $chain_name,
           saddr     => $route,

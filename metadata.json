@@ -1,6 +1,6 @@
 {
   "name": "rehan-openvpn",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "author": "Rehan Mahmood",
   "summary": "A puppet module for installing, managing and generating OpenVPN Configuration & Certificates for both Clients and Servers",
   "license": "Apache-2.0",

@@ -1,3 +1,10 @@
+## 0.7.0 (May 19, 2021)
+
+**Improvements:**
+
+- Updated OS support matrix.
+- Updated `pdk` templates.
+
 ## 0.6.0 (May 21, 2020)
 
 **Improvements:**

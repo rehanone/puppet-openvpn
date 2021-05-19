@@ -1,6 +1,6 @@
 ## 0.6.0 (May 21, 2020)
 
-Improvements:
+**Improvements:**
 
 - Allows adding custom ferm dsl for subchains. This is important for using complex iptable rules that are currently not supported by this module or would be very hard to manage just using puppet.
 - Added support for extra embadded client config file.
@@ -12,7 +12,7 @@ Improvements:
 
 ## 0.5.0 (February 16, 2020)
 
-Improvements:
+**Improvements:**
 
 - Added support for CentOS 8.
 - Updated os support matrix.
@@ -20,14 +20,14 @@ Improvements:
 
 ## 0.4.0 (September 16, 2019)
 
-Improvements:
+**Improvements:**
 
 - Update supported network interfaces.
 - Updated `pdk` templates.
 
 ## 0.3.0 (August 29, 2019)
 
-Improvements:
+**Improvements:**
 
 - Added support for Debian 10.
 - Updated os support matrix.
@@ -35,7 +35,7 @@ Improvements:
 
 ## 0.2.0 (June 23, 2019)
 
-Improvements:
+**Improvements:**
 
 - Updated minimum `puppet` version to 5.5.10.
 - Updated os support matrix.
@@ -43,6 +43,6 @@ Improvements:
 
 ## 0.1.0 (February 19, 2018)
 
-Features:
+**Features:**
 
   - Initial release

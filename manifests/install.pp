@@ -4,7 +4,6 @@ class openvpn::install inherits openvpn {
 
   package { $openvpn::package_name:
     ensure => $openvpn::package_ensure,
-    alias  => 'openvpn',
   }
   -> file { $openvpn::conf_dir:
     ensure => directory,

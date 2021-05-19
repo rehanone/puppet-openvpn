@@ -56,7 +56,7 @@ define openvpn::client (
 
   file {
     [ "${openvpn::bundles_dir}/${key_name}",
-      "${openvpn::bundles_dir}/${key_name}/keys"
+      "${openvpn::bundles_dir}/${key_name}/keys",
     ]:
       ensure  => directory,
       require => File[$openvpn::bundles_dir];
@@ -127,7 +127,7 @@ define openvpn::client (
         },
       }
     ),
-    require => Easyrsa::Client[$title]
+    require => Easyrsa::Client[$title],
   }
 
 

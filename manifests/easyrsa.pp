@@ -7,15 +7,13 @@ class openvpn::easyrsa () inherits openvpn {
     class { 'easyrsa':
       git_manage => $openvpn::git_manage,
       pkiroot    => $openvpn::pkiroot,
-      pkis       =>
-        {
-          $openvpn::pkiname => {},
-        },
+      pkis       => {
+        $openvpn::pkiname => {},
+      },
       cas        => {
         $openvpn::pkiname => {
           ca_name      => $openvpn::ca_name,
-          key          =>
-          {
+          key          => {
             algo       => $openvpn::key_algo,
             size       => $openvpn::key_size,
             valid_days => $openvpn::ca_expire,
